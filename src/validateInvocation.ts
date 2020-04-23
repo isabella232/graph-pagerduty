@@ -1,7 +1,8 @@
 import { IntegrationExecutionContext } from '@jupiterone/integration-sdk';
 import { requestAll } from './pager-duty';
 
-export const authenticationFailedMessage = 'Config requires apiKey to be set';
+export const authenticationFailedMessage =
+  'Failed to authenticate with given apiKey';
 
 export default async function validateInvocation(
   context: IntegrationExecutionContext,
