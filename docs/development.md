@@ -1,28 +1,51 @@
 # Development
 
-Add details here to give a brief overview of how to work with the provider APIs.
-Please reference any SDKs or API docs used to help build the integration here.
+This integration uses the
+[PagerDuty API](https://developer.pagerduty.com/api-reference/), on PagerDuty's
+documentation the supply a sample API key allowing you to make requests to their
+API.
+
+The current resources being queried from the PagerDuty API are the following:
+
+- Services
+- Teams
+- Users
+- OnCall _information about what user is on call for services_
 
 ## Prerequisites
 
-Supply details about software or tooling (like maybe Docker or Terraform) that
-is needed for development here.
-
-Please supply references to documentation that details how to install those
-dependencies here.
-
-Tools like Node.js and NPM are already covered in the [README](../README.md) so
-don't bother documenting that here.
+Aside from what is documented in the [README](../README.md), no special tooling
+is required to run and test this integration.
 
 ## Provider account setup
 
-Please provide information about the steps needed to create an account with a
-provider. Images and references to a provider's documentation is very helpful
-for new developers picking up your work.
+To setup a PagerDuty account for development, please take the following steps:
+
+1. Visit the [PagerDuty](https://www.pagerduty.com/sign-up/) site.
+1. Fill out the Trial sign up form then click `Get Started`.
+1. Go through PagerDuty's getting started steps until you reach the dashboard.
 
 ## Authentication
 
-Supply details here for information on how to authenticate with a provider so
-that developers have an idea of what's needed to hit APIs. It may be useful to
-provide explanations for each value specified in
-[../src/instanceConfigFields.json](../src/instanceConfigFields.json).
+Once you've created your account, you'll need to generate an API Key to access
+the PagerDuty API.
+
+Visit https://support.pagerduty.com/docs/generating-api-keys and follow the
+instructions to create a `REST API Key`. _When creating the API Key be sure to
+check Read Only Access_
+
+![](./read-only-key.png)
+
+Once you have your API Key requests against PagerDuty's API looks like the
+following:
+
+```bash
+curl --location --request GET 'https://api.pagerduty.com/{resource}' \
+--header 'Authorization: Token token={apiKey}'
+```
+
+`Resource` is the PagerDuty resource that you are requesting such as users,
+teams, or services and `apiKey` is the PagerDuty api token previously generated.
+
+For more examples the PagerDuty API can be found
+[here](https://developer.pagerduty.com/api-reference/).
