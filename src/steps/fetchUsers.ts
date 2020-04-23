@@ -48,7 +48,6 @@ const step: IntegrationStep = {
     await jobState.iterateEntities(
       { _type: 'pagerduty_team' },
       async (teamEntity) => {
-        // TODO: figure out if there is a better way to get the id
         const id = teamEntity._key.split(':')[1];
         if (teamGrouping[id]) {
           const teamRelationships = teamGrouping[id].map((user) =>
