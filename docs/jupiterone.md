@@ -21,6 +21,6 @@ The following entity resources are ingested when the integration runs.
 
 | From             | Edge         | To                  |
 | ---------------- | ------------ | ------------------- |
-| `pagerduty_user` | **ASSIGNED** | `pagerduty_team`    |
+| `pagerduty_team` | **HAS**      | `pagerduty_user`    |
 | `pagerduty_team` | **ASSIGNED** | `pagerduty_service` |
 | `pagerduty_user` | **ONCALL**   | `pagerduty_service` |
