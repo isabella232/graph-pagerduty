@@ -78,18 +78,17 @@ describe('users entities/relationships', () => {
 
   test('generate user/team relationships', () => {
     const userTeamRelationships = context.jobState.collectedRelationships.filter(
-      (r) => r._type === 'pagerduty_user_assigned_team',
+      (r) => r._type === 'pagerduty_team_has_user',
     );
-
     expect(userTeamRelationships).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          _key: expect.stringMatching(/user:PU.*\|assigned\|team:PT.*/g),
-          _type: 'pagerduty_user_assigned_team',
-          _class: 'ASSIGNED',
-          _fromEntityKey: expect.stringMatching(/user:.*/g),
-          _toEntityKey: expect.stringMatching(/team:.*/g),
-          displayName: 'ASSIGNED',
+          _key: expect.stringMatching(/team:PT.*\|has\|user:PU.*/g),
+          _type: 'pagerduty_team_has_user',
+          _class: 'HAS',
+          _fromEntityKey: expect.stringMatching(/team:.*/g),
+          _toEntityKey: expect.stringMatching(/user:.*/g),
+          displayName: 'HAS',
         }),
       ]),
     );

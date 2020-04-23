@@ -52,11 +52,11 @@ const step: IntegrationStep = {
         if (teamGrouping[id]) {
           const teamRelationships = teamGrouping[id].map((user) =>
             createIntegrationRelationship({
-              _class: 'ASSIGNED',
-              fromKey: `user:${user.id}`,
-              fromType: `pagerduty_user`,
-              toKey: teamEntity._key,
-              toType: teamEntity._type,
+              _class: 'HAS',
+              fromKey: teamEntity._key,
+              fromType: teamEntity._type,
+              toKey: `user:${user.id}`,
+              toType: `pagerduty_user`,
             }),
           );
           await jobState.addRelationships(teamRelationships);
