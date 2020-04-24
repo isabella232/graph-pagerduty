@@ -5,6 +5,7 @@ import {
 } from '@jupiterone/integration-sdk';
 import { requestAll } from '../pager-duty';
 import { Team } from '../types';
+import { deleteNullProperties } from '../utils';
 
 const step: IntegrationStep = {
   id: 'fetch-teams',
@@ -23,17 +24,13 @@ const step: IntegrationStep = {
     const teamEntities = teams.map((team) =>
       createIntegrationEntity({
         entityData: {
-          source: {
-            id: team.id,
-            name: team.name,
-            description: team.description,
-            summary: team.summary,
-          },
+          source: deleteNullProperties(team),
           assign: {
             _key: `team:${team.id}`,
             _type: 'pagerduty_team',
             _class: 'Team',
-            _rawData: [{ name: 'team', rawData: team }],
+            description: team.description,
+            summary: team.summary,
           },
         },
       }),

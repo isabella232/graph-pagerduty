@@ -5,13 +5,6 @@ This integration uses the
 documentation the supply a sample API key allowing you to make requests to their
 API.
 
-The current resources being queried from the PagerDuty API are the following:
-
-- Services
-- Teams
-- Users
-- OnCall _information about what user is on call for services_
-
 ## Prerequisites
 
 Aside from what is documented in the [README](../README.md), no special tooling
@@ -49,3 +42,7 @@ teams, or services and `apiKey` is the PagerDuty api token previously generated.
 
 For more examples the PagerDuty API can be found
 [here](https://developer.pagerduty.com/api-reference/).
+
+## Testing
+
+The PagerDuty API calls can return **sensitive information** such as **names, emails, and phone numbers**. As a result, **be sure to scrub the responses of your PagerDuty API calls within your tests of sensitive information**. The current tests have already had their Polly HAR files cleaned of sensitive information.

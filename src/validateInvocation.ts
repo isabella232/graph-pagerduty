@@ -3,6 +3,7 @@ import { requestAll } from './pager-duty';
 
 export const authenticationFailedMessage =
   'Failed to authenticate with given apiKey';
+export const authenticationSucceededMessage = 'PagerDuty Integration is valid!';
 
 export default async function validateInvocation(
   context: IntegrationExecutionContext,
@@ -15,7 +16,7 @@ export default async function validateInvocation(
   );
 
   if (await isConfigurationValid(context.instance.config)) {
-    context.logger.info('PagerDuty Integration is valid!');
+    context.logger.info(authenticationSucceededMessage);
   } else {
     throw new Error(authenticationFailedMessage);
   }

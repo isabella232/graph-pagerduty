@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import { OnCall, Service } from '../types';
 import { requestAll } from '../pager-duty';
-import { reduceGroupById } from '../utils/reduceGroupById';
+import { reduceGroupById, deleteNullProperties } from '../utils';
 
 const step: IntegrationStep = {
   id: 'fetch-services',
@@ -43,23 +43,20 @@ async function buildServiceEntities(
   const serviceEntities = services.map((service) =>
     createIntegrationEntity({
       entityData: {
-        source: {
-          id: service.id,
-          name: service.name,
-          description: service.description,
-          summary: service.summary,
-        },
+        source: deleteNullProperties(service),
         assign: {
           _key: `service:${service.id}`,
           _type: 'pagerduty_service',
           _class: 'Service',
-          _rawData: [{ name: 'service', rawData: service }],
+          description: service.description,
+          summary: service.summary,
           category: ['software'],
           endpoints: [service.html_url],
         },
       },
     }),
   );
+
   await jobState.addEntities(serviceEntities);
 }
 

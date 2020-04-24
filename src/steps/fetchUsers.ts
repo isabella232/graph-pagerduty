@@ -6,7 +6,7 @@ import {
 } from '@jupiterone/integration-sdk';
 import { requestAll } from '../pager-duty';
 import { User } from '../types';
-import { reduceGroupById } from '../utils';
+import { reduceGroupById, deleteNullProperties } from '../utils';
 
 const step: IntegrationStep = {
   id: 'fetch-users',
@@ -26,17 +26,15 @@ const step: IntegrationStep = {
       createIntegrationEntity({
         entityData: {
           source: {
-            id: user.id,
-            name: user.name,
-            role: user.role,
+            ...deleteNullProperties(user),
           },
           assign: {
             _key: `user:${user.id}`,
             _type: 'pagerduty_user',
             _class: 'User',
-            _rawData: [{ name: 'user', rawData: user }],
             username: user.email,
             email: user.email,
+            summary: user.summary,
           },
         },
       }),

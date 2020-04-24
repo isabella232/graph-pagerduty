@@ -7,6 +7,7 @@ const mockedAxios = mocked(axios, true);
 
 import validateInvocation, {
   authenticationFailedMessage,
+  authenticationSucceededMessage,
 } from '../validateInvocation';
 
 beforeEach(() => {
@@ -46,6 +47,11 @@ test('returns true when the request is successful', async () => {
 
   const context = createMockExecutionContext();
   context.instance.config = { apiKey: 'foo-api-key' };
+  context.logger.info = jest.fn();
 
-  await expect(validateInvocation(context)).resolves.toBe(undefined);
+  await validateInvocation(context);
+
+  expect(context.logger.info).toHaveBeenCalledWith(
+    authenticationSucceededMessage,
+  );
 });
