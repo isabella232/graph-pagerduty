@@ -40,6 +40,7 @@ describe('team entities', () => {
           id: expect.any(String),
           name: expect.any(String),
           description: expect.any(String),
+          summary: expect.any(String),
           _key: expect.stringMatching(/team:PT.*/g),
           _type: 'pagerduty_team',
           _class: ['Team'],
@@ -80,6 +81,7 @@ describe('users entities/relationships', () => {
     const userTeamRelationships = context.jobState.collectedRelationships.filter(
       (r) => r._type === 'pagerduty_team_has_user',
     );
+
     expect(userTeamRelationships).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -114,6 +116,8 @@ describe('service entities/relationships', () => {
           _class: ['Service'],
           _rawData: expect.any(Array),
           category: ['software'],
+          status: expect.any(String),
+          active: expect.any(Boolean),
           displayName: expect.any(String),
         }),
       ]),
@@ -155,6 +159,7 @@ describe('service entities/relationships', () => {
           _fromEntityKey: expect.stringMatching(/user:PU.*/g),
           _toEntityKey: expect.stringMatching(/service:PS.*/g),
           displayName: 'ONCALL',
+          escalationLevel: expect.any(Number),
         }),
       ]),
     );

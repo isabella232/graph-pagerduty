@@ -31,8 +31,6 @@ const step: IntegrationStep = {
             _type: 'pagerduty_user',
             _class: 'User',
             username: user.email,
-            email: user.email,
-            summary: user.summary,
           },
         },
       }),

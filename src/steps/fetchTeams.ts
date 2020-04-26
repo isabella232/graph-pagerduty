@@ -28,8 +28,6 @@ const step: IntegrationStep = {
             _key: `team:${team.id}`,
             _type: 'pagerduty_team',
             _class: 'Team',
-            description: team.description,
-            summary: team.summary,
           },
         },
       }),

@@ -48,8 +48,6 @@ async function buildServiceEntities(
           _key: `service:${service.id}`,
           _type: 'pagerduty_service',
           _class: 'Service',
-          description: service.description,
-          summary: service.summary,
           category: ['software'],
           endpoints: [service.html_url],
         },
