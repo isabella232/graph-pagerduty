@@ -6,7 +6,7 @@ import {
 } from '@jupiterone/integration-sdk';
 import { requestAll } from '../pager-duty';
 import { User } from '../types';
-import { reduceGroupById, deleteNullProperties } from '../utils';
+import { reduceGroupById } from '../utils';
 
 const step: IntegrationStep = {
   id: 'fetch-users',
@@ -25,9 +25,7 @@ const step: IntegrationStep = {
     const userEntities = users.map((user) =>
       createIntegrationEntity({
         entityData: {
-          source: {
-            ...deleteNullProperties(user),
-          },
+          source: user,
           assign: {
             _key: `user:${user.id}`,
             _type: 'pagerduty_user',
