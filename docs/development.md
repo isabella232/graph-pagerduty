@@ -1,9 +1,8 @@
 # Development
 
-This integration uses the
-[PagerDuty API](https://developer.pagerduty.com/api-reference/), on PagerDuty's
-documentation the supply a sample API key allowing you to make requests to their
-API.
+This integration uses theth
+[PagerDuty API](https://developer.pagerduty.com/api-reference/), on their
+documentation there is a sample API key to test PagerDuty's API.
 
 ## Prerequisites
 
