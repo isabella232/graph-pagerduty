@@ -4,3 +4,4 @@ dist/
 
 .j1-integration
 .eslintcache
+coverage
