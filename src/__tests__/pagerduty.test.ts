@@ -2,7 +2,7 @@ import { mocked } from 'ts-jest/utils';
 import axios from 'axios';
 import range from 'lodash/range';
 
-import { requestAll, request, restApi } from '../pager-duty';
+import { requestAll, request, restApi } from '../pagerduty';
 
 jest.mock('axios');
 const mockedAxios = mocked(axios, true);

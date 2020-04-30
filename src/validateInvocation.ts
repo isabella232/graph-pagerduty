@@ -1,5 +1,5 @@
 import { IntegrationExecutionContext } from '@jupiterone/integration-sdk';
-import { requestAll } from './pager-duty';
+import { requestAll } from './pagerduty';
 
 export const authenticationFailedMessage =
   'Failed to authenticate with given apiKey';
