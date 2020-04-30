@@ -8,7 +8,7 @@ import {
 import _ from 'lodash';
 
 import { OnCall, Service } from '../types';
-import { requestAll } from '../pager-duty';
+import { requestAll } from '../pagerduty';
 import { reduceGroupById } from '../utils';
 
 const step: IntegrationStep = {

@@ -1,5 +1,5 @@
 {
-  "name": "@jupiterone/graph-pager-duty",
+  "name": "@jupiterone/graph-pagerduty",
   "version": "1.0.1",
   "description": "A graph conversion tool for https://www.pagerduty.com/.",
   "license": "MPL-2.0",

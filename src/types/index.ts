@@ -1,1 +1,1 @@
-export * from './pager-duty';
+export * from './pagerduty';

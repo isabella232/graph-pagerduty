@@ -3,7 +3,7 @@ import {
   IntegrationStepExecutionContext,
   createIntegrationEntity,
 } from '@jupiterone/integration-sdk';
-import { requestAll } from '../pager-duty';
+import { requestAll } from '../pagerduty';
 import { Team } from '../types';
 
 const step: IntegrationStep = {

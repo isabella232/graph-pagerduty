@@ -4,7 +4,7 @@ import {
   createIntegrationEntity,
   createIntegrationRelationship,
 } from '@jupiterone/integration-sdk';
-import { requestAll } from '../pager-duty';
+import { requestAll } from '../pagerduty';
 import { User } from '../types';
 import { reduceGroupById } from '../utils';
 
