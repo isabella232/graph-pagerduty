@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-pagerduty",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A graph conversion tool for https://www.pagerduty.com/.",
   "license": "MPL-2.0",
   "files": [
@@ -22,7 +22,7 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "@jupiterone/integration-sdk": "^0.14.0",
+    "@jupiterone/integration-sdk": "^0.17.0",
     "@lifeomic/attempt": "^3.0.0",
     "axios": "^0.19.2",
     "lodash": "^4.17.15"

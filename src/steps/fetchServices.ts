@@ -78,7 +78,9 @@ async function buildTeamRelations(
             toType: teamEntity._type,
           }),
         );
-        await jobState.addRelationships(serviceRelationships);
+        await jobState.addRelationships(
+          _.uniqBy(serviceRelationships, (r) => r._key),
+        );
       }
     },
   );
@@ -117,7 +119,7 @@ async function buildOnCallRelations(
     return relationships;
   }, []);
 
-  await jobState.addRelationships(oncallRelationships);
+  await jobState.addRelationships(_.uniqBy(oncallRelationships, (r) => r._key));
 }
 
 export default step;
