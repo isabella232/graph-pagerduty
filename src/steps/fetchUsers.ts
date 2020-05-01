@@ -7,6 +7,7 @@ import {
 import { requestAll } from '../pagerduty';
 import { User } from '../types';
 import { reduceGroupById } from '../utils';
+import _ from 'lodash';
 
 const step: IntegrationStep = {
   id: 'fetch-users',
@@ -53,7 +54,9 @@ const step: IntegrationStep = {
               toType: `pagerduty_user`,
             }),
           );
-          await jobState.addRelationships(teamRelationships);
+          await jobState.addRelationships(
+            _.uniqBy(teamRelationships, (r) => r._key),
+          );
         }
       },
     );
