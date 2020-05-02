@@ -49,6 +49,7 @@ async function buildServiceEntities(
           _type: 'pagerduty_service',
           _class: 'Service',
           category: ['software'],
+          active: service.status === 'active',
           endpoints: [service.html_url],
         },
       },

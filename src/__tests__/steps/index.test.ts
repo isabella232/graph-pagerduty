@@ -117,7 +117,7 @@ describe('service entities/relationships', () => {
           _rawData: expect.any(Array),
           category: ['software'],
           status: expect.any(String),
-          active: expect.any(Boolean),
+          active: true,
           displayName: expect.any(String),
         }),
       ]),

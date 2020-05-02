@@ -451,10 +451,10 @@
   dependencies:
     ajv "^6.12.0"
 
-"@jupiterone/integration-sdk@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@jupiterone/integration-sdk/-/integration-sdk-0.14.0.tgz#2fbcbd29a798879d4a5f11b2d4e133f655c052e2"
-  integrity sha512-92El9/EV3VRZ26Nnqc/BrP4y3B9tMI9BShnhPrzgfxuw75bWYnK6d0uBygkMeEllhJUDgvDeak1M3mXqcaauFA==
+"@jupiterone/integration-sdk@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@jupiterone/integration-sdk/-/integration-sdk-0.17.0.tgz#fc88a00367df2ef84c7c95bf881f8fa81cc2fc4b"
+  integrity sha512-R326bc5AFgHrDCUM3+qLKPqEtywmSAHlEEJwxqEjUM1X6IqlEGkJenXURSLXZpJUoA2ErblkNGJSHfK1r6Ei4g==
   dependencies:
     "@jupiterone/data-model" "^0.3.1"
     "@lifeomic/alpha" "^1.1.3"
@@ -468,6 +468,7 @@
     commander "^5.0.0"
     dependency-graph "^0.9.0"
     dotenv "^8.2.0"
+    dotenv-expand "^5.1.0"
     globby "^11.0.0"
     jsonwebtoken "^8.5.1"
     lodash "^4.17.15"
@@ -1712,6 +1713,11 @@ domexception@^1.0.1:
   integrity sha512-raigMkn7CJNNo6Ihro1fzG7wr3fHuYVytzquZKX5n0yizGsTcYgzdIUwj1X9pK0VvjeihV+XiclP+DjwbsSKug==
   dependencies:
     webidl-conversions "^4.0.2"
+
+dotenv-expand@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-5.1.0.tgz#3fbaf020bfd794884072ea26b1e9791d45a629f0"
+  integrity sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==
 
 dotenv@^8.2.0:
   version "8.2.0"
