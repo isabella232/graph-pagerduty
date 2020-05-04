@@ -66,6 +66,7 @@ describe('users entities/relationships', () => {
           name: expect.any(String),
           username: expect.any(String),
           email: expect.any(String),
+          admin: expect.any(Boolean),
           _key: expect.stringMatching(/user:PU.*/g),
           _type: 'pagerduty_user',
           _class: ['User'],
