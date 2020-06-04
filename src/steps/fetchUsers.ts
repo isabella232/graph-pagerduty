@@ -14,7 +14,7 @@ const step: IntegrationStep = {
   id: 'fetch-users',
   name: 'Fetch Users',
   dependsOn: ['fetch-teams'],
-  types: ['pagerduty_user'],
+  types: ['pagerduty_user', 'pagerduty_team_has_user'],
   async executionHandler({
     logger,
     jobState,
