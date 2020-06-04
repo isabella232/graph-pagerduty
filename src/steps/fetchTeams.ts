@@ -2,7 +2,7 @@ import {
   IntegrationStep,
   IntegrationStepExecutionContext,
   createIntegrationEntity,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 import { requestAll } from '../pagerduty';
 import { Team } from '../types';
 import { PagerDutyIntegrationInstanceConfig } from '../types';

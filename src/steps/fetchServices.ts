@@ -4,7 +4,7 @@ import {
   createIntegrationEntity,
   createIntegrationRelationship,
   JobState,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 import _ from 'lodash';
 
 import { OnCall, Service } from '../types';

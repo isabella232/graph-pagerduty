@@ -24,12 +24,14 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "@jupiterone/integration-sdk": "^3.1.0",
     "@lifeomic/attempt": "^3.0.0",
     "axios": "^0.19.2",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "@jupiterone/integration-sdk-cli": "^1.1.0",
+    "@jupiterone/integration-sdk-core": "^1.1.0",
+    "@jupiterone/integration-sdk-testing": "^1.1.0",
     "@types/jest": "^25.2.1",
     "@types/lodash": "^4.14.149",
     "@types/node": "^13.11.1",
@@ -48,6 +50,6 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "@jupiterone/integration-sdk": "^3.1.0"
+    "@jupiterone/integration-sdk-core": "^1.1.0"
   }
 }

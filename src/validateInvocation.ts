@@ -1,4 +1,4 @@
-import { IntegrationExecutionContext } from '@jupiterone/integration-sdk';
+import { IntegrationExecutionContext } from '@jupiterone/integration-sdk-core';
 import { requestAll } from './pagerduty';
 import { PagerDutyIntegrationInstanceConfig } from './types';
 

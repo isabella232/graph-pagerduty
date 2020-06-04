@@ -3,7 +3,7 @@ import {
   IntegrationStepExecutionContext,
   createIntegrationEntity,
   createIntegrationRelationship,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 import { requestAll } from '../pagerduty';
 import { User } from '../types';
 import { reduceGroupById } from '../utils';
