@@ -9,6 +9,7 @@ import validateInvocation, {
   authenticationFailedMessage,
   authenticationSucceededMessage,
 } from '../validateInvocation';
+import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 beforeEach(() => {
   jest.resetAllMocks();
@@ -20,8 +21,12 @@ test('throws authentication error when apiKey is not specified', async () => {
     more: false,
   });
 
-  const context = createMockExecutionContext({
-    instanceConfig: {},
+  const context = createMockExecutionContext<
+    PagerDutyIntegrationInstanceConfig
+  >({
+    instanceConfig: {
+      apiKey: undefined,
+    },
   });
   await expect(validateInvocation(context)).rejects.toThrowError(
     authenticationFailedMessage,
@@ -31,7 +36,9 @@ test('throws authentication error when apiKey is not specified', async () => {
 test('throws authentication error when request to api fails', async () => {
   mockedAxios.get.mockRejectedValue(new Error('Failed'));
 
-  const context = createMockExecutionContext();
+  const context = createMockExecutionContext<
+    PagerDutyIntegrationInstanceConfig
+  >();
   context.instance.config = { apiKey: 'foo-api-key' };
 
   await expect(validateInvocation(context)).rejects.toThrowError(
@@ -45,7 +52,9 @@ test('returns true when the request is successful', async () => {
     more: false,
   });
 
-  const context = createMockExecutionContext();
+  const context = createMockExecutionContext<
+    PagerDutyIntegrationInstanceConfig
+  >();
   context.instance.config = { apiKey: 'foo-api-key' };
   context.logger.info = jest.fn();
 

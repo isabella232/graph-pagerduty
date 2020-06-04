@@ -6,8 +6,9 @@ import validateInvocation from './validateInvocation';
 import fetchServices from './steps/fetchServices';
 import fetchTeams from './steps/fetchTeams';
 import fetchUsers from './steps/fetchUsers';
+import { PagerDutyIntegrationInstanceConfig } from './types';
 
-export const invocationConfig: IntegrationInvocationConfig = {
+export const invocationConfig: IntegrationInvocationConfig<PagerDutyIntegrationInstanceConfig> = {
   instanceConfigFields,
   validateInvocation,
   integrationSteps: [fetchServices, fetchTeams, fetchUsers],

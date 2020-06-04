@@ -8,6 +8,7 @@ import { requestAll } from '../pagerduty';
 import { User } from '../types';
 import { reduceGroupById } from '../utils';
 import _ from 'lodash';
+import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 const step: IntegrationStep = {
   id: 'fetch-users',
@@ -18,7 +19,7 @@ const step: IntegrationStep = {
     logger,
     jobState,
     instance,
-  }: IntegrationStepExecutionContext) {
+  }: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
     const { apiKey } = instance.config;
 
     logger.info('Requesting /users endpoint');

@@ -10,6 +10,7 @@ import _ from 'lodash';
 import { OnCall, Service } from '../types';
 import { requestAll } from '../pagerduty';
 import { reduceGroupById } from '../utils';
+import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 const step: IntegrationStep = {
   id: 'fetch-services',
@@ -20,7 +21,7 @@ const step: IntegrationStep = {
     logger,
     jobState,
     instance,
-  }: IntegrationStepExecutionContext) {
+  }: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
     logger.info('Requesting /services endpoint');
     const { apiKey } = instance.config;
     const services = await requestAll<Service>('/services', 'services', apiKey);
