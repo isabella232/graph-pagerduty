@@ -1,12 +1,13 @@
-import { IntegrationExecutionContext } from '@jupiterone/integration-sdk';
+import { IntegrationExecutionContext } from '@jupiterone/integration-sdk-core';
 import { requestAll } from './pagerduty';
+import { PagerDutyIntegrationInstanceConfig } from './types';
 
 export const authenticationFailedMessage =
   'Failed to authenticate with given apiKey';
 export const authenticationSucceededMessage = 'PagerDuty Integration is valid!';
 
 export default async function validateInvocation(
-  context: IntegrationExecutionContext,
+  context: IntegrationExecutionContext<PagerDutyIntegrationInstanceConfig>,
 ): Promise<void> {
   context.logger.info(
     {

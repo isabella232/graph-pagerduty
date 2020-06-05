@@ -3,22 +3,23 @@ import {
   IntegrationStepExecutionContext,
   createIntegrationEntity,
   createIntegrationRelationship,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 import { requestAll } from '../pagerduty';
 import { User } from '../types';
 import { reduceGroupById } from '../utils';
 import _ from 'lodash';
+import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 const step: IntegrationStep = {
   id: 'fetch-users',
   name: 'Fetch Users',
   dependsOn: ['fetch-teams'],
-  types: ['pagerduty_user'],
+  types: ['pagerduty_user', 'pagerduty_team_has_user'],
   async executionHandler({
     logger,
     jobState,
     instance,
-  }: IntegrationStepExecutionContext) {
+  }: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
     const { apiKey } = instance.config;
 
     logger.info('Requesting /users endpoint');

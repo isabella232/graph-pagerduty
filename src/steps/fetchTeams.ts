@@ -2,9 +2,10 @@ import {
   IntegrationStep,
   IntegrationStepExecutionContext,
   createIntegrationEntity,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 import { requestAll } from '../pagerduty';
 import { Team } from '../types';
+import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 const step: IntegrationStep = {
   id: 'fetch-teams',
@@ -14,7 +15,7 @@ const step: IntegrationStep = {
     logger,
     jobState,
     instance,
-  }: IntegrationStepExecutionContext) {
+  }: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
     const { apiKey } = instance.config;
 
     logger.info('Requesting /teams endpoint');

@@ -4,23 +4,28 @@ import {
   createIntegrationEntity,
   createIntegrationRelationship,
   JobState,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 import _ from 'lodash';
 
 import { OnCall, Service } from '../types';
 import { requestAll } from '../pagerduty';
 import { reduceGroupById } from '../utils';
+import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 const step: IntegrationStep = {
   id: 'fetch-services',
   name: 'Fetch Services',
   dependsOn: ['fetch-teams', 'fetch-users'],
-  types: ['pagerduty_service'],
+  types: [
+    'pagerduty_service',
+    'pagerduty_service_assigned_team',
+    'pagerduty_user_oncall_service',
+  ],
   async executionHandler({
     logger,
     jobState,
     instance,
-  }: IntegrationStepExecutionContext) {
+  }: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
     logger.info('Requesting /services endpoint');
     const { apiKey } = instance.config;
     const services = await requestAll<Service>('/services', 'services', apiKey);

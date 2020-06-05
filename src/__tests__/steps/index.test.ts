@@ -2,7 +2,7 @@ import {
   createMockStepExecutionContext,
   setupRecording,
   Recording,
-} from '@jupiterone/integration-sdk/testing';
+} from '@jupiterone/integration-sdk-testing';
 
 import fetchTeamsStep from '../../steps/fetchTeams';
 import fetchUsersStep from '../../steps/fetchUsers';
