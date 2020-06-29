@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-pagerduty",
-  "version": "2.0.1",
+  "version": "2.1.1",
   "description": "A graph conversion tool for https://www.pagerduty.com/.",
   "license": "MPL-2.0",
   "main": "dist/index.js",
@@ -29,9 +29,9 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "@jupiterone/integration-sdk-cli": "^1.1.0",
-    "@jupiterone/integration-sdk-core": "^1.1.0",
-    "@jupiterone/integration-sdk-testing": "^1.1.0",
+    "@jupiterone/integration-sdk-core": "^2.2.0",
+    "@jupiterone/integration-sdk-dev-tools": "^2.2.0",
+    "@jupiterone/integration-sdk-testing": "^2.2.0",
     "@types/jest": "^25.2.1",
     "@types/lodash": "^4.14.149",
     "@types/node": "^13.11.1",
@@ -50,6 +50,6 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "@jupiterone/integration-sdk-core": "^1.1.0"
+    "@jupiterone/integration-sdk-core": "^2.2.0"
   }
 }
