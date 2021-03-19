@@ -1,25 +1,26 @@
-import {
-  IntegrationStep,
-  IntegrationStepExecutionContext,
-  createIntegrationEntity,
-  createIntegrationRelationship,
-  JobState,
-} from '@jupiterone/integration-sdk-core';
 import _ from 'lodash';
 
-import { OnCall, Service } from '../types';
+import {
+  createDirectRelationship,
+  createIntegrationEntity,
+  IntegrationStep,
+  IntegrationStepExecutionContext,
+  JobState,
+} from '@jupiterone/integration-sdk-core';
+
+import { entities, relationships } from '../constants';
 import { requestAll } from '../pagerduty';
+import { OnCall, PagerDutyIntegrationInstanceConfig, Service } from '../types';
 import { reduceGroupById } from '../utils';
-import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 const step: IntegrationStep = {
   id: 'fetch-services',
   name: 'Fetch Services',
   dependsOn: ['fetch-teams', 'fetch-users'],
-  types: [
-    'pagerduty_service',
-    'pagerduty_service_assigned_team',
-    'pagerduty_user_oncall_service',
+  entities: [entities.SERVICE],
+  relationships: [
+    relationships.SERVICE_ASSIGNED_TEAM,
+    relationships.USER_MONITORS_SERVICE,
   ],
   async executionHandler({
     logger,
@@ -76,10 +77,10 @@ async function buildTeamRelations(
       const id = teamEntity._key.split(':')[1];
       if (teamServiceGrouping[id]) {
         const serviceRelationships = teamServiceGrouping[id].map((service) =>
-          createIntegrationRelationship({
-            _class: 'ASSIGNED',
+          createDirectRelationship({
+            _class: relationships.SERVICE_ASSIGNED_TEAM._class,
             fromKey: `service:${service.id}`,
-            fromType: `pagerduty_service`,
+            fromType: entities.SERVICE._type,
             toKey: teamEntity._key,
             toType: teamEntity._type,
           }),
@@ -101,19 +102,19 @@ async function buildOnCallRelations(
     .groupBy((service) => service.escalation_policy.id)
     .value();
 
-  const oncallRelationships = oncalls.reduce((relationships, oncall) => {
+  const oncallRelationships = oncalls.reduce((acc, oncall) => {
     const escalationPolicyId = oncall.escalation_policy.id;
     const services = escalationPolicyServiceGrouping[escalationPolicyId];
 
     if (services) {
-      relationships.push(
+      acc.push(
         ...services.map((service) =>
-          createIntegrationRelationship({
-            _class: 'ONCALL',
+          createDirectRelationship({
+            _class: relationships.USER_MONITORS_SERVICE._class,
             fromKey: `user:${oncall.user.id}`,
-            fromType: 'pagerduty_user',
+            fromType: entities.USER._type,
             toKey: `service:${service.id}`,
-            toType: 'pagerduty_service',
+            toType: entities.SERVICE._type,
             properties: {
               escalationLevel: oncall.escalation_level,
             },
@@ -122,7 +123,7 @@ async function buildOnCallRelations(
       );
     }
 
-    return relationships;
+    return acc;
   }, []);
 
   await jobState.addRelationships(_.uniqBy(oncallRelationships, (r) => r._key));

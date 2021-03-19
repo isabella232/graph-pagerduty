@@ -1,20 +1,23 @@
+import _ from 'lodash';
+
 import {
+  createDirectRelationship,
+  createIntegrationEntity,
   IntegrationStep,
   IntegrationStepExecutionContext,
-  createIntegrationEntity,
-  createIntegrationRelationship,
 } from '@jupiterone/integration-sdk-core';
+
+import { entities, relationships } from '../constants';
 import { requestAll } from '../pagerduty';
-import { User } from '../types';
+import { PagerDutyIntegrationInstanceConfig, User } from '../types';
 import { reduceGroupById } from '../utils';
-import _ from 'lodash';
-import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 const step: IntegrationStep = {
   id: 'fetch-users',
   name: 'Fetch Users',
   dependsOn: ['fetch-teams'],
-  types: ['pagerduty_user', 'pagerduty_team_has_user'],
+  entities: [entities.USER],
+  relationships: [relationships.TEAM_HAS_USER],
   async executionHandler({
     logger,
     jobState,
@@ -30,8 +33,8 @@ const step: IntegrationStep = {
           source: user,
           assign: {
             _key: `user:${user.id}`,
-            _type: 'pagerduty_user',
-            _class: 'User',
+            _type: entities.USER._type,
+            _class: entities.USER._class,
             id: user.id,
             type: user.type,
             username: user.email,
@@ -58,12 +61,12 @@ const step: IntegrationStep = {
         const id = teamEntity._key.split(':')[1];
         if (teamGrouping[id]) {
           const teamRelationships = teamGrouping[id].map((user) =>
-            createIntegrationRelationship({
-              _class: 'HAS',
+            createDirectRelationship({
+              _class: relationships.TEAM_HAS_USER._class,
               fromKey: teamEntity._key,
               fromType: teamEntity._type,
               toKey: `user:${user.id}`,
-              toType: `pagerduty_user`,
+              toType: entities.USER._type,
             }),
           );
           await jobState.addRelationships(

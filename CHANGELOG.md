@@ -8,6 +8,15 @@ and this project adheres to
 
 ## Unreleased
 
+### Changed
+
+- Migrated to latest integration SDK for improved error handling and reporting.
+
+- Relationships
+  - `User - ONCALL -> Service` has been changed to `User - MONITORS -> Service`.
+    Relationships are best expressed as verbs, and `MONITORS` is the preferred
+    verb in this type of relationship.
+
 ## 2.2.0 - 2021-03-19
 
 ### Added

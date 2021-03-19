@@ -1,16 +1,18 @@
 import {
+  createIntegrationEntity,
   IntegrationStep,
   IntegrationStepExecutionContext,
-  createIntegrationEntity,
 } from '@jupiterone/integration-sdk-core';
+
+import { entities } from '../constants';
 import { requestAll } from '../pagerduty';
-import { Team } from '../types';
-import { PagerDutyIntegrationInstanceConfig } from '../types';
+import { PagerDutyIntegrationInstanceConfig, Team } from '../types';
 
 const step: IntegrationStep = {
   id: 'fetch-teams',
   name: 'Fetch Teams',
-  types: ['pagerduty_team'],
+  entities: [entities.TEAM],
+  relationships: [],
   async executionHandler({
     logger,
     jobState,
@@ -27,8 +29,8 @@ const step: IntegrationStep = {
           source: team,
           assign: {
             _key: `team:${team.id}`,
-            _type: 'pagerduty_team',
-            _class: 'Team',
+            _type: entities.TEAM._type,
+            _class: entities.TEAM._class,
           },
         },
       }),
