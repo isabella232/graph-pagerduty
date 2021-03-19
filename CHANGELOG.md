@@ -8,6 +8,8 @@ and this project adheres to
 
 ## Unreleased
 
+## 2.2.0 - 2021-03-19
+
 ### Added
 
 - New Properties
