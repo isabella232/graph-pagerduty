@@ -17,6 +17,10 @@ and this project adheres to
     Relationships are best expressed as verbs, and `MONITORS` is the preferred
     verb in this type of relationship.
 
+### Fixed
+
+- A number of type check errors after upgrading TypeScript
+
 ## 2.2.0 - 2021-03-19
 
 ### Added

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {
   createDirectRelationship,
   createIntegrationEntity,
+  ExplicitRelationship,
   IntegrationStep,
   IntegrationStepExecutionContext,
   JobState,
@@ -13,7 +14,26 @@ import { requestAll } from '../pagerduty';
 import { OnCall, PagerDutyIntegrationInstanceConfig, Service } from '../types';
 import { reduceGroupById } from '../utils';
 
-const step: IntegrationStep = {
+export async function fetchServices({
+  logger,
+  jobState,
+  instance,
+}: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
+  logger.info('Requesting /services endpoint');
+  const { apiKey } = instance.config;
+  const services = await requestAll<Service>('/services', 'services', apiKey);
+
+  await buildServiceEntities(jobState, services);
+
+  await buildTeamRelations(jobState, services);
+
+  logger.info('Requesting /oncalls endpoint');
+  const oncalls = await requestAll<OnCall>('/oncalls', 'oncalls', apiKey);
+
+  await buildOnCallRelations(jobState, oncalls, services);
+}
+
+const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
   id: 'fetch-services',
   name: 'Fetch Services',
   dependsOn: ['fetch-teams', 'fetch-users'],
@@ -22,24 +42,7 @@ const step: IntegrationStep = {
     relationships.SERVICE_ASSIGNED_TEAM,
     relationships.USER_MONITORS_SERVICE,
   ],
-  async executionHandler({
-    logger,
-    jobState,
-    instance,
-  }: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
-    logger.info('Requesting /services endpoint');
-    const { apiKey } = instance.config;
-    const services = await requestAll<Service>('/services', 'services', apiKey);
-
-    await buildServiceEntities(jobState, services);
-
-    await buildTeamRelations(jobState, services);
-
-    logger.info('Requesting /oncalls endpoint');
-    const oncalls = await requestAll<OnCall>('/oncalls', 'oncalls', apiKey);
-
-    await buildOnCallRelations(jobState, oncalls, services);
-  },
+  executionHandler: fetchServices,
 };
 
 async function buildServiceEntities(
@@ -106,12 +109,12 @@ async function buildOnCallRelations(
     const escalationPolicyId = oncall.escalation_policy.id;
     const services = escalationPolicyServiceGrouping[escalationPolicyId];
 
-    if (services) {
+    if (services && oncall.user) {
       acc.push(
         ...services.map((service) =>
           createDirectRelationship({
             _class: relationships.USER_MONITORS_SERVICE._class,
-            fromKey: `user:${oncall.user.id}`,
+            fromKey: `user:${oncall.user!.id}`,
             fromType: entities.USER._type,
             toKey: `service:${service.id}`,
             toType: entities.SERVICE._type,
@@ -124,7 +127,7 @@ async function buildOnCallRelations(
     }
 
     return acc;
-  }, []);
+  }, [] as ExplicitRelationship[]);
 
   await jobState.addRelationships(_.uniqBy(oncallRelationships, (r) => r._key));
 }

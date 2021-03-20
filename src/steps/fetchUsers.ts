@@ -12,7 +12,7 @@ import { requestAll } from '../pagerduty';
 import { PagerDutyIntegrationInstanceConfig, User } from '../types';
 import { reduceGroupById } from '../utils';
 
-const step: IntegrationStep = {
+const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
   id: 'fetch-users',
   name: 'Fetch Users',
   dependsOn: ['fetch-teams'],

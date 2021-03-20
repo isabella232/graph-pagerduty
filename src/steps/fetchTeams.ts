@@ -8,7 +8,7 @@ import { entities } from '../constants';
 import { requestAll } from '../pagerduty';
 import { PagerDutyIntegrationInstanceConfig, Team } from '../types';
 
-const step: IntegrationStep = {
+const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
   id: 'fetch-teams',
   name: 'Fetch Teams',
   entities: [entities.TEAM],
