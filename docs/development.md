@@ -44,4 +44,8 @@ For more examples the PagerDuty API can be found
 
 ## Testing
 
-The PagerDuty API calls can return **sensitive information** such as **names, emails, and phone numbers**. As a result, **be sure to scrub the responses of your PagerDuty API calls within your tests of sensitive information**. The current tests have already had their Polly HAR files cleaned of sensitive information.
+The PagerDuty API calls can return **sensitive information** such as **names,
+emails, and phone numbers**. As a result, **be sure to scrub the responses of
+your PagerDuty API calls within your tests of sensitive information**. The
+current tests have already had their Polly HAR files cleaned of sensitive
+information.

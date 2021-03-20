@@ -148,18 +148,18 @@ describe('service entities/relationships', () => {
 
   test('generates service/user relationships', () => {
     const serviceUserRelationships = context.jobState.collectedRelationships.filter(
-      (r) => r._type === 'pagerduty_user_oncall_service',
+      (r) => r._type === 'pagerduty_user_monitors_service',
     );
 
     expect(serviceUserRelationships).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          _key: expect.stringMatching(/user:PU.*\|oncall\|service:PS.*/g),
-          _type: 'pagerduty_user_oncall_service',
-          _class: 'ONCALL',
+          _key: expect.stringMatching(/user:PU.*\|monitors\|service:PS.*/g),
+          _type: 'pagerduty_user_monitors_service',
+          _class: 'MONITORS',
           _fromEntityKey: expect.stringMatching(/user:PU.*/g),
           _toEntityKey: expect.stringMatching(/service:PS.*/g),
-          displayName: 'ONCALL',
+          displayName: 'MONITORS',
           escalationLevel: expect.any(Number),
         }),
       ]),

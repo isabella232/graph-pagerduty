@@ -1,44 +1,48 @@
-import {
-  IntegrationStep,
-  IntegrationStepExecutionContext,
-  createIntegrationEntity,
-  createIntegrationRelationship,
-  JobState,
-} from '@jupiterone/integration-sdk-core';
 import _ from 'lodash';
 
-import { OnCall, Service } from '../types';
-import { requestAll } from '../pagerduty';
-import { reduceGroupById } from '../utils';
-import { PagerDutyIntegrationInstanceConfig } from '../types';
+import {
+  createDirectRelationship,
+  createIntegrationEntity,
+  ExplicitRelationship,
+  IntegrationStep,
+  IntegrationStepExecutionContext,
+  JobState,
+} from '@jupiterone/integration-sdk-core';
 
-const step: IntegrationStep = {
+import { entities, relationships } from '../constants';
+import { requestAll } from '../pagerduty';
+import { OnCall, PagerDutyIntegrationInstanceConfig, Service } from '../types';
+import { reduceGroupById } from '../utils';
+
+export async function fetchServices({
+  logger,
+  jobState,
+  instance,
+}: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
+  logger.info('Requesting /services endpoint');
+  const { apiKey } = instance.config;
+  const services = await requestAll<Service>('/services', 'services', apiKey);
+
+  await buildServiceEntities(jobState, services);
+
+  await buildTeamRelations(jobState, services);
+
+  logger.info('Requesting /oncalls endpoint');
+  const oncalls = await requestAll<OnCall>('/oncalls', 'oncalls', apiKey);
+
+  await buildOnCallRelations(jobState, oncalls, services);
+}
+
+const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
   id: 'fetch-services',
   name: 'Fetch Services',
   dependsOn: ['fetch-teams', 'fetch-users'],
-  types: [
-    'pagerduty_service',
-    'pagerduty_service_assigned_team',
-    'pagerduty_user_oncall_service',
+  entities: [entities.SERVICE],
+  relationships: [
+    relationships.SERVICE_ASSIGNED_TEAM,
+    relationships.USER_MONITORS_SERVICE,
   ],
-  async executionHandler({
-    logger,
-    jobState,
-    instance,
-  }: IntegrationStepExecutionContext<PagerDutyIntegrationInstanceConfig>) {
-    logger.info('Requesting /services endpoint');
-    const { apiKey } = instance.config;
-    const services = await requestAll<Service>('/services', 'services', apiKey);
-
-    await buildServiceEntities(jobState, services);
-
-    await buildTeamRelations(jobState, services);
-
-    logger.info('Requesting /oncalls endpoint');
-    const oncalls = await requestAll<OnCall>('/oncalls', 'oncalls', apiKey);
-
-    await buildOnCallRelations(jobState, oncalls, services);
-  },
+  executionHandler: fetchServices,
 };
 
 async function buildServiceEntities(
@@ -76,10 +80,10 @@ async function buildTeamRelations(
       const id = teamEntity._key.split(':')[1];
       if (teamServiceGrouping[id]) {
         const serviceRelationships = teamServiceGrouping[id].map((service) =>
-          createIntegrationRelationship({
-            _class: 'ASSIGNED',
+          createDirectRelationship({
+            _class: relationships.SERVICE_ASSIGNED_TEAM._class,
             fromKey: `service:${service.id}`,
-            fromType: `pagerduty_service`,
+            fromType: entities.SERVICE._type,
             toKey: teamEntity._key,
             toType: teamEntity._type,
           }),
@@ -101,19 +105,19 @@ async function buildOnCallRelations(
     .groupBy((service) => service.escalation_policy.id)
     .value();
 
-  const oncallRelationships = oncalls.reduce((relationships, oncall) => {
+  const oncallRelationships = oncalls.reduce((acc, oncall) => {
     const escalationPolicyId = oncall.escalation_policy.id;
     const services = escalationPolicyServiceGrouping[escalationPolicyId];
 
-    if (services) {
-      relationships.push(
+    if (services && oncall.user) {
+      acc.push(
         ...services.map((service) =>
-          createIntegrationRelationship({
-            _class: 'ONCALL',
-            fromKey: `user:${oncall.user.id}`,
-            fromType: 'pagerduty_user',
+          createDirectRelationship({
+            _class: relationships.USER_MONITORS_SERVICE._class,
+            fromKey: `user:${oncall.user!.id}`,
+            fromType: entities.USER._type,
             toKey: `service:${service.id}`,
-            toType: 'pagerduty_service',
+            toType: entities.SERVICE._type,
             properties: {
               escalationLevel: oncall.escalation_level,
             },
@@ -122,8 +126,8 @@ async function buildOnCallRelations(
       );
     }
 
-    return relationships;
-  }, []);
+    return acc;
+  }, [] as ExplicitRelationship[]);
 
   await jobState.addRelationships(_.uniqBy(oncallRelationships, (r) => r._key));
 }

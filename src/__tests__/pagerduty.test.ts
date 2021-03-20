@@ -85,6 +85,6 @@ describe('requestAll', () => {
     await expect(requestAll('/users', 'users', token, 5)).resolves.toEqual(
       users,
     );
-    await expect(axios.get).toHaveBeenCalledTimes(2);
+    expect(axios.get).toHaveBeenCalledTimes(2);
   });
 });

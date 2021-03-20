@@ -8,6 +8,21 @@ and this project adheres to
 
 ## Unreleased
 
+## 3.0.0 - 2021-03-19
+
+### Changed
+
+- Migrated to latest integration SDK for improved error handling and reporting.
+
+- Relationships
+  - `User - ONCALL -> Service` has been changed to `User - MONITORS -> Service`.
+    Relationships are best expressed as verbs, and `MONITORS` is the preferred
+    verb in this type of relationship.
+
+### Fixed
+
+- A number of type check errors after upgrading TypeScript
+
 ## 2.2.0 - 2021-03-19
 
 ### Added

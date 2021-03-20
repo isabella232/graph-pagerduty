@@ -25,7 +25,7 @@ test('throws authentication error when apiKey is not specified', async () => {
     PagerDutyIntegrationInstanceConfig
   >({
     instanceConfig: {
-      apiKey: undefined,
+      apiKey: undefined as any,
     },
   });
   await expect(validateInvocation(context)).rejects.toThrowError(

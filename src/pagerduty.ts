@@ -1,6 +1,8 @@
 import axios from 'axios';
+
 import { retry } from '@lifeomic/attempt';
-import { PagerDutyResponse, PagerDutyQueryParams } from './types';
+
+import { PagerDutyQueryParams, PagerDutyResponse } from './types';
 
 export const restApi = 'https://api.pagerduty.com';
 
@@ -44,14 +46,14 @@ export async function requestAll<T>(
 ): Promise<T[]> {
   let cursor = 0;
   let hasMoreOnCalls;
-  const requestElements = [];
+  let requestElements: T[] = [];
   do {
     const { data, more } = await request<T[]>(endpoint, token, {
       limit,
       offset: cursor * limit,
     });
 
-    requestElements.push(...data[entity]);
+    requestElements = [...requestElements, ...data[entity]];
 
     hasMoreOnCalls = more;
     cursor++;
