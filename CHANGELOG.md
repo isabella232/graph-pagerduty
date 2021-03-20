@@ -8,6 +8,8 @@ and this project adheres to
 
 ## Unreleased
 
+## 3.0.0 - 2021-03-19
+
 ### Changed
 
 - Migrated to latest integration SDK for improved error handling and reporting.
