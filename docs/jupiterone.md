@@ -17,7 +17,8 @@
 
 ## Requirements
 
-- JupiterOne requires a PagerDuty General Access REST API key
+- JupiterOne requires a PagerDuty General Access REST API key.
+- You must have permission in JupiterOne to install new integrations.
 
 ## Support
 
