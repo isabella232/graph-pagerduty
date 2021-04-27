@@ -1,10 +1,10 @@
-import { IntegrationExecutionContext } from '@jupiterone/integration-sdk-core';
+import {
+  IntegrationExecutionContext,
+  IntegrationProviderAPIError,
+  IntegrationValidationError,
+} from '@jupiterone/integration-sdk-core';
 import { requestAll } from './pagerduty';
 import { PagerDutyIntegrationInstanceConfig } from './types';
-
-export const authenticationFailedMessage =
-  'Failed to authenticate with given apiKey';
-export const authenticationSucceededMessage = 'PagerDuty Integration is valid!';
 
 export default async function validateInvocation(
   context: IntegrationExecutionContext<PagerDutyIntegrationInstanceConfig>,
@@ -16,22 +16,20 @@ export default async function validateInvocation(
     'Validating integration config...',
   );
 
-  if (await isConfigurationValid(context.instance.config)) {
-    context.logger.info(authenticationSucceededMessage);
-  } else {
-    throw new Error(authenticationFailedMessage);
+  if (!context.instance.config.apiKey) {
+    throw new IntegrationValidationError(
+      'ERROR: Context is missing apiKey configuration variable',
+    );
   }
-}
-
-async function isConfigurationValid(config: {
-  apiKey: string;
-}): Promise<boolean> {
-  if (!config.apiKey) return false;
 
   try {
-    await requestAll('/users', 'users', config.apiKey, 1);
-    return true;
+    await requestAll('/users', 'users', context.instance.config.apiKey, 1);
   } catch (e) {
-    return false;
+    throw new IntegrationProviderAPIError({
+      cause: e,
+      endpoint: '/users',
+      status: e.status || e.code,
+      statusText: e.statusText || e.message,
+    });
   }
 }

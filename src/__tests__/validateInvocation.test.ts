@@ -5,10 +5,7 @@ import axios from 'axios';
 jest.mock('axios');
 const mockedAxios = mocked(axios, true);
 
-import validateInvocation, {
-  authenticationFailedMessage,
-  authenticationSucceededMessage,
-} from '../validateInvocation';
+import validateInvocation from '../validateInvocation';
 import { PagerDutyIntegrationInstanceConfig } from '../types';
 
 beforeEach(() => {
@@ -29,7 +26,7 @@ test('throws authentication error when apiKey is not specified', async () => {
     },
   });
   await expect(validateInvocation(context)).rejects.toThrowError(
-    authenticationFailedMessage,
+    'ERROR: Context is missing apiKey configuration variable',
   );
 });
 
@@ -42,11 +39,11 @@ test('throws authentication error when request to api fails', async () => {
   context.instance.config = { apiKey: 'foo-api-key' };
 
   await expect(validateInvocation(context)).rejects.toThrowError(
-    authenticationFailedMessage,
+    'Provider API failed at /users: undefined Failed',
   );
 });
 
-test('returns true when the request is successful', async () => {
+test('does not throw when the request is successful', async () => {
   mockedAxios.get.mockResolvedValueOnce({
     data: { users: [] },
     more: false,
@@ -58,9 +55,5 @@ test('returns true when the request is successful', async () => {
   context.instance.config = { apiKey: 'foo-api-key' };
   context.logger.info = jest.fn();
 
-  await validateInvocation(context);
-
-  expect(context.logger.info).toHaveBeenCalledWith(
-    authenticationSucceededMessage,
-  );
+  await expect(validateInvocation(context)).resolves.toBeUndefined();
 });
