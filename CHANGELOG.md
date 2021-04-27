@@ -8,6 +8,8 @@ and this project adheres to
 
 ## Unreleased
 
+## 3.0.1 - 2021-04-27
+
 ### Changed
 
 - Improved messaging for errors from `validateInvocation`.
