@@ -1,4 +1,7 @@
-import { IntegrationExecutionContext } from '@jupiterone/integration-sdk-core';
+import {
+  IntegrationExecutionContext,
+  IntegrationLogger,
+} from '@jupiterone/integration-sdk-core';
 import { requestAll } from './pagerduty';
 import { PagerDutyIntegrationInstanceConfig } from './types';
 
@@ -16,22 +19,26 @@ export default async function validateInvocation(
     'Validating integration config...',
   );
 
-  if (await isConfigurationValid(context.instance.config)) {
+  if (await isConfigurationValid(context.instance.config, context.logger)) {
     context.logger.info(authenticationSucceededMessage);
   } else {
     throw new Error(authenticationFailedMessage);
   }
 }
 
-async function isConfigurationValid(config: {
-  apiKey: string;
-}): Promise<boolean> {
+async function isConfigurationValid(
+  config: {
+    apiKey: string;
+  },
+  logger: IntegrationLogger,
+): Promise<boolean> {
   if (!config.apiKey) return false;
 
   try {
     await requestAll('/users', 'users', config.apiKey, 1);
     return true;
-  } catch (e) {
+  } catch (err) {
+    logger.warn(err, 'Failed to authenticate isConfigurationValid');
     return false;
   }
 }

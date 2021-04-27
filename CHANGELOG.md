@@ -8,6 +8,10 @@ and this project adheres to
 
 ## Unreleased
 
+### Added
+
+- Logged error message when `isConfigurationValid()` returns false.
+
 ## 3.0.0 - 2021-03-19
 
 ### Changed
