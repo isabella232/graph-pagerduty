@@ -1,9 +1,9 @@
 import {
   IntegrationExecutionContext,
-  IntegrationProviderAPIError,
+  IntegrationProviderAuthenticationError,
   IntegrationValidationError,
 } from '@jupiterone/integration-sdk-core';
-import { requestAll } from './pagerduty';
+import { requestAll, restApi } from './pagerduty';
 import { PagerDutyIntegrationInstanceConfig } from './types';
 
 export default async function validateInvocation(
@@ -25,11 +25,16 @@ export default async function validateInvocation(
   try {
     await requestAll('/users', 'users', context.instance.config.apiKey, 1);
   } catch (e) {
-    throw new IntegrationProviderAPIError({
+    const pdApiKeyError = new IntegrationProviderAuthenticationError({
       cause: e,
-      endpoint: '/users',
+      endpoint: restApi + '/users',
       status: e.status || e.code,
       statusText: e.statusText || e.message,
     });
+
+    // PagerDuty allows users to configure either general access REST api keys OR event API keys. Clarify for customers which they should be using.
+    pdApiKeyError.message +=
+      '. Please ensure you have configured a valid PagerDuty General Access REST API Key.';
+    throw pdApiKeyError;
   }
 }

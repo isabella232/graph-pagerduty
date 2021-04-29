@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-pagerduty",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A graph conversion tool for https://www.pagerduty.com/.",
   "license": "MPL-2.0",
   "main": "dist/index.js",
@@ -17,7 +17,7 @@
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "format": "prettier --write '**/*.{ts,js,json,css,md,yml}'",
     "type-check": "tsc",
-    "test": "jest",
+    "test": "LOAD_ENV=1 yarn jest",
     "test:ci": "yarn lint && yarn type-check && yarn test",
     "build": "tsc -p tsconfig.dist.json --declaration",
     "prepush": "yarn lint && yarn type-check && jest --changedSince master",
@@ -34,6 +34,7 @@
   "devDependencies": {
     "@jupiterone/integration-sdk-core": "^5.11.0",
     "@jupiterone/integration-sdk-dev-tools": "^5.11.0",
-    "@jupiterone/integration-sdk-testing": "^5.11.0"
+    "@jupiterone/integration-sdk-testing": "^5.11.0",
+    "dotenv": "^8.2.0"
   }
 }

@@ -1,8 +1,14 @@
-import { AxiosResponse } from 'axios';
-
-export interface PagerDutyResponse<T> extends AxiosResponse<T> {
+interface Pagination {
+  limit: number;
+  offset: number;
+  total: null;
   more: boolean;
 }
+
+/**
+ * PagerDuty response bodies contain an array
+ */
+export type PaginatedResponse = Pagination;
 
 export interface PagerDutyQueryParams {
   offset?: number;

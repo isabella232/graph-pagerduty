@@ -1,16 +1,16 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { retry } from '@lifeomic/attempt';
 
-import { PagerDutyQueryParams, PagerDutyResponse } from './types';
+import { PagerDutyQueryParams, PaginatedResponse } from './types';
 
 export const restApi = 'https://api.pagerduty.com';
 
-export async function request<T>(
+export async function request(
   endpoint: string,
   token: string,
   queryParams?: PagerDutyQueryParams,
-): Promise<PagerDutyResponse<T>> {
+): Promise<AxiosResponse<PaginatedResponse>> {
   return retry(
     async function () {
       return axios.get(`${restApi}${endpoint}`, {
@@ -37,7 +37,6 @@ export async function request<T>(
     },
   );
 }
-
 export async function requestAll<T>(
   endpoint: string,
   entity: string,
@@ -45,17 +44,18 @@ export async function requestAll<T>(
   limit = 100,
 ): Promise<T[]> {
   let cursor = 0;
-  let hasMoreOnCalls;
-  let requestElements: T[] = [];
+  let hasMoreOnCalls: boolean;
+  const requestElements: T[] = [];
   do {
-    const { data, more } = await request<T[]>(endpoint, token, {
+    const { data } = await request(endpoint, token, {
       limit,
       offset: cursor * limit,
     });
 
-    requestElements = [...requestElements, ...data[entity]];
+    const resources: T[] = data[entity];
+    requestElements.push(...resources);
 
-    hasMoreOnCalls = more;
+    hasMoreOnCalls = data.more;
     cursor++;
   } while (hasMoreOnCalls);
 

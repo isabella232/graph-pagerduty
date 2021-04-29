@@ -1,59 +1,57 @@
 import { createMockExecutionContext } from '@jupiterone/integration-sdk-testing';
-import { mocked } from 'ts-jest/utils';
-import axios from 'axios';
-
-jest.mock('axios');
-const mockedAxios = mocked(axios, true);
-
 import validateInvocation from '../validateInvocation';
-import { PagerDutyIntegrationInstanceConfig } from '../types';
 
-beforeEach(() => {
-  jest.resetAllMocks();
+import {
+  setupPagerDutyRecording,
+  Recording,
+} from '../../test/setupPagerDutyRecording';
+import { testConfig } from '../../test/config';
+
+let recording: Recording;
+
+afterEach(async () => {
+  if (recording) {
+    await recording.stop();
+  }
 });
 
-test('throws authentication error when apiKey is not specified', async () => {
-  mockedAxios.get.mockResolvedValueOnce({
-    data: { users: [] },
-    more: false,
+describe('validateInvocation', () => {
+  test('should throw if no apiKey provided', async () => {
+    const context = createMockExecutionContext({
+      instanceConfig: { apiKey: (undefined as unknown) as string },
+    });
+
+    await expect(validateInvocation(context)).rejects.toThrow(
+      'ERROR: Context is missing apiKey configuration variable',
+    );
   });
 
-  const context = createMockExecutionContext<
-    PagerDutyIntegrationInstanceConfig
-  >({
-    instanceConfig: {
-      apiKey: undefined as any,
-    },
-  });
-  await expect(validateInvocation(context)).rejects.toThrowError(
-    'ERROR: Context is missing apiKey configuration variable',
-  );
-});
+  test('should return undefined for valid configuration', async () => {
+    recording = setupPagerDutyRecording({
+      directory: __dirname,
+      name: 'validateInvocation::shouldReturnUndefinedForValidConfiguration',
+    });
 
-test('throws authentication error when request to api fails', async () => {
-  mockedAxios.get.mockRejectedValue(new Error('Failed'));
+    const context = createMockExecutionContext({
+      instanceConfig: testConfig,
+    });
 
-  const context = createMockExecutionContext<
-    PagerDutyIntegrationInstanceConfig
-  >();
-  context.instance.config = { apiKey: 'foo-api-key' };
-
-  await expect(validateInvocation(context)).rejects.toThrowError(
-    'Provider API failed at /users: undefined Failed',
-  );
-});
-
-test('does not throw when the request is successful', async () => {
-  mockedAxios.get.mockResolvedValueOnce({
-    data: { users: [] },
-    more: false,
+    await expect(validateInvocation(context)).resolves.toBeUndefined();
   });
 
-  const context = createMockExecutionContext<
-    PagerDutyIntegrationInstanceConfig
-  >();
-  context.instance.config = { apiKey: 'foo-api-key' };
-  context.logger.info = jest.fn();
+  test('should throw if apiKey is invalid', async () => {
+    recording = setupPagerDutyRecording({
+      directory: __dirname,
+      name: 'validateInvocation::shouldThrowIfApiKeyIsInvalid',
+      options: { recordFailedRequests: true },
+    });
 
-  await expect(validateInvocation(context)).resolves.toBeUndefined();
+    const context = createMockExecutionContext({
+      instanceConfig: { apiKey: 'invalid-api-key' },
+    });
+
+    await expect(validateInvocation(context)).rejects.toThrow(
+      'Provider authentication failed at https://api.pagerduty.com/users: undefined Request failed with status code 404. Please ensure you have configured a valid PagerDuty General Access REST API Key.',
+    );
+  });
 });
