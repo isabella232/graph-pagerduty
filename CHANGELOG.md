@@ -8,6 +8,8 @@ and this project adheres to
 
 ## Unreleased
 
+## 3.0.2 - 2021-04-29
+
 ### Changed
 
 - Fixed broken pagination in PagerDuty integration. Pagination expected a
