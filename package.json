@@ -20,7 +20,7 @@
     "test": "LOAD_ENV=1 yarn jest",
     "test:ci": "yarn lint && yarn type-check && yarn test",
     "build": "tsc -p tsconfig.dist.json --declaration",
-    "prepush": "yarn lint && yarn type-check && jest --changedSince master",
+    "prepush": "yarn lint && yarn type-check && jest --changedSince main",
     "prepack": "yarn build"
   },
   "peerDependencies": {
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@lifeomic/attempt": "^3.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
