@@ -9,12 +9,7 @@ import {
 
 import { entities, relationships } from '../constants';
 import { requestAll } from '../pagerduty';
-import {
-  PagerDutyIntegrationInstanceConfig,
-  User,
-  OnCall,
-  Service,
-} from '../types';
+import { PagerDutyIntegrationInstanceConfig, OnCall, Service } from '../types';
 
 const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
   id: 'build-user-monitors-service',
@@ -41,7 +36,7 @@ const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
       async (serviceEntity) => {
         const serviceData = getRawData<Service>(serviceEntity);
         if (
-          serviceData.escalation_policy &&
+          serviceData?.escalation_policy &&
           oncallLookup[serviceData.escalation_policy.id].user?.id
         ) {
           await jobState.addRelationship(

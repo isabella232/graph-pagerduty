@@ -25,7 +25,7 @@ const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
       { _type: entities.USER._type },
       async (userEntity) => {
         const userData = getRawData<User>(userEntity);
-        if (userData.teams) {
+        if (userData?.teams) {
           const teamRelationships = userData.teams.map((team) =>
             createDirectRelationship({
               _class: relationships.TEAM_HAS_USER._class,
