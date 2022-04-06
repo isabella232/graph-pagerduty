@@ -26,7 +26,7 @@ export async function fetchServices({
 const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
   id: 'fetch-services',
   name: 'Fetch Services',
-  dependsOn: ['fetch-teams', 'fetch-users'],
+  dependsOn: [],
   entities: [entities.SERVICE],
   relationships: [
     relationships.SERVICE_ASSIGNED_TEAM,

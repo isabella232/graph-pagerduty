@@ -13,7 +13,7 @@ import { PagerDutyIntegrationInstanceConfig, User } from '../types';
 const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
   id: 'fetch-users',
   name: 'Fetch Users',
-  dependsOn: ['fetch-teams'],
+  dependsOn: [],
   entities: [entities.USER],
   relationships: [relationships.TEAM_HAS_USER],
   async executionHandler({
