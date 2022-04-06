@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 import {
-  createDirectRelationship,
   createIntegrationEntity,
   IntegrationStep,
   IntegrationStepExecutionContext,
@@ -10,7 +9,6 @@ import {
 import { entities, relationships } from '../constants';
 import { requestAll } from '../pagerduty';
 import { PagerDutyIntegrationInstanceConfig, User } from '../types';
-import { reduceGroupById } from '../utils';
 
 const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
   id: 'fetch-users',
@@ -52,29 +50,6 @@ const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
       }),
     );
     await jobState.addEntities(userEntities);
-
-    const teamGrouping = reduceGroupById(users, 'teams');
-
-    await jobState.iterateEntities(
-      { _type: 'pagerduty_team' },
-      async (teamEntity) => {
-        const id = teamEntity._key.split(':')[1];
-        if (teamGrouping[id]) {
-          const teamRelationships = teamGrouping[id].map((user) =>
-            createDirectRelationship({
-              _class: relationships.TEAM_HAS_USER._class,
-              fromKey: teamEntity._key,
-              fromType: teamEntity._type,
-              toKey: `user:${user.id}`,
-              toType: entities.USER._type,
-            }),
-          );
-          await jobState.addRelationships(
-            _.uniqBy(teamRelationships, (r) => r._key),
-          );
-        }
-      },
-    );
   },
 };
 

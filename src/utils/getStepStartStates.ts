@@ -7,13 +7,16 @@ import { requestAll } from '../pagerduty';
 import fetchServices from '../steps/fetchServices';
 import fetchTeams from '../steps/fetchTeams';
 import fetchUsers from '../steps/fetchUsers';
+import fetchOncalls from '../steps/fetchOncalls';
+import buildServiceAssignedTeam from '../steps/buildServiceAssignedTeam';
+import buildTeamHasUser from '../steps/buildTeamHasUser';
 
 export async function getStepStartStates(
   executionContext: IntegrationExecutionContext<
     PagerDutyIntegrationInstanceConfig
   >,
 ): Promise<StepStartStates> {
-  let disableTeamsStep = false;
+  let disableTeamsSteps = false;
   const abilityList: string[] = await requestAll(
     '/abilities',
     'abilities',
@@ -25,12 +28,15 @@ export async function getStepStartStates(
   // based on unlocked abilities.  If this changes in the
   // future, we can add the ability to disable further.
   if (!abilityList.includes('teams')) {
-    disableTeamsStep = true;
+    disableTeamsSteps = true;
   }
 
   return {
     [fetchServices.id]: { disabled: false },
-    [fetchTeams.id]: { disabled: disableTeamsStep },
+    [fetchTeams.id]: { disabled: disableTeamsSteps },
     [fetchUsers.id]: { disabled: false },
+    [fetchOncalls.id]: { disabled: false },
+    [buildServiceAssignedTeam.id]: { disabled: disableTeamsSteps },
+    [buildTeamHasUser.id]: { disabled: disableTeamsSteps },
   };
 }
