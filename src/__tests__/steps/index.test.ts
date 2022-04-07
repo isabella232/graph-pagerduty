@@ -160,7 +160,7 @@ describe('service entities/relationships', () => {
     expect(serviceUserRelationships).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          // _key: expect.stringMatching(/user:PU.*\|monitors\|service:PS.*/g),
+          _key: expect.stringMatching(/user:PU.*\|monitors\|service:PS.*/g),
           _type: 'pagerduty_user_monitors_service',
           _class: 'MONITORS',
           _fromEntityKey: expect.stringMatching(/user:PU.*/g),
