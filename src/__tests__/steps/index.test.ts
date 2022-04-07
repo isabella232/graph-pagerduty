@@ -7,6 +7,9 @@ import {
 import fetchTeamsStep from '../../steps/fetchTeams';
 import fetchUsersStep from '../../steps/fetchUsers';
 import fetchServicesStep from '../../steps/fetchServices';
+import fetchOncalls from '../../steps/fetchOncalls';
+import buildServiceAssignedTeam from '../../steps/buildServiceAssignedTeam';
+import buildTeamHasUser from '../../steps/buildTeamHasUser';
 
 let recording: Recording;
 let context;
@@ -22,6 +25,9 @@ beforeAll(async () => {
   await fetchTeamsStep.executionHandler(context);
   await fetchUsersStep.executionHandler(context);
   await fetchServicesStep.executionHandler(context);
+  await fetchOncalls.executionHandler(context);
+  await buildServiceAssignedTeam.executionHandler(context);
+  await buildTeamHasUser.executionHandler(context);
 });
 
 afterAll(async () => {
@@ -164,6 +170,6 @@ describe('service entities/relationships', () => {
         }),
       ]),
     );
-    expect(serviceUserRelationships).toHaveLength(150);
+    expect(serviceUserRelationships).toHaveLength(45);
   });
 });
