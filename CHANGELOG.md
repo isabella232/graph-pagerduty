@@ -8,6 +8,15 @@ and this project adheres to
 
 ## Unreleased
 
+## 3.1.0 - 2022-04-07
+
+### Changed
+
+- We are now querying for what 'abilities' are enabled for the querying API key
+  and disabling unsupported steps accordingly.
+- Decoupled several steps from building relationships to prevent unnecessary
+  disabling of steps due to a missing 'ability'.
+
 ## 3.0.2 - 2021-04-29
 
 ### Changed
