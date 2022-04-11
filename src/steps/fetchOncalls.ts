@@ -35,7 +35,7 @@ const step: IntegrationStep<PagerDutyIntegrationInstanceConfig> = {
         const serviceData = getRawData<Service>(serviceEntity);
         if (
           serviceData?.escalation_policy &&
-          oncallLookup[serviceData.escalation_policy.id].user?.id
+          oncallLookup[serviceData.escalation_policy.id]?.user?.id
         ) {
           await jobState.addRelationship(
             createDirectRelationship({
