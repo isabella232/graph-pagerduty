@@ -8,6 +8,12 @@ and this project adheres to
 
 ## Unreleased
 
+## 3.1.1 - 2022-04-11
+
+### Fixed
+
+- Adding check to on-call relationship step to prevent potential error.
+
 ## 3.1.0 - 2022-04-07
 
 ### Changed
